@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/login_interface">
+    <fragment
+        android:id="@+id/login_interface"
+        android:name="com.example.cs125.Login_interface"
+        android:label="fragment_login_interface"
+        tools:layout="@layout/fragment_login_interface" >
+        <action
+            android:id="@+id/action_login_interface_to_afterLog3"
+            app:destination="@id/afterLog3" />
+    </fragment>
+    <fragment
+        android:id="@+id/afterLog3"
+        android:name="com.example.cs125.AfterLog"
+        android:label="fragment_after_log"
+        tools:layout="@layout/fragment_after_log" />
+</navigation>
