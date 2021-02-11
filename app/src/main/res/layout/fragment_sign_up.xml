@@ -2,26 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/SignUp_interface_i"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login_interface">
+    tools:context=".SignUpFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_launcher_background">
-
-        <Button
-            android:id="@+id/SignUpbutton"
-            android:layout_width="168dp"
-            android:layout_height="42dp"
-            android:layout_marginBottom="88dp"
-            android:text="@string/sign_up"
-            app:backgroundTint="#E91E63"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.466"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView"
@@ -35,10 +30,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478" />
+
         <EditText
             android:id="@+id/editTextTextPassword2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,8 +43,7 @@
             app:layout_constraintHorizontal_bias="0.706"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.583"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.583" />
 
         <TextView
             android:id="@+id/textView2"
@@ -66,39 +62,40 @@
             android:id="@+id/editTextTextEmailAddress2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="80dp"
-            android:layout_marginRight="80dp"
+            android:layout_marginEnd="68dp"
+            android:layout_marginRight="68dp"
             android:ems="10"
             android:hint="@string/enter_user_id_here"
+            android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.479"
-            android:importantForAutofill="no" />
+            app:layout_constraintVertical_bias="0.492" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="241dp"
             android:layout_height="210dp"
+            android:contentDescription="@string/todo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.511"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.157"
-            app:srcCompat="@drawable/rester"
-            android:contentDescription="@string/todo" />
+            app:srcCompat="@drawable/rester" />
 
         <Button
-            android:id="@+id/LogninButton"
-            android:layout_width="168dp"
-            android:layout_height="42dp"
-            android:layout_marginBottom="180dp"
-            android:text="@string/log_in"
+            android:id="@+id/ReigsterButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reigster Now"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.467"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.732" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

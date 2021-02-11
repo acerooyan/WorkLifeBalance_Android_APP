@@ -12,10 +12,19 @@
         <action
             android:id="@+id/action_login_interface_to_afterLog3"
             app:destination="@id/afterLog3" />
+        <action
+            android:id="@+id/action_login_interface_to_signUpFragment6"
+            app:destination="@id/signUpFragment6" />
     </fragment>
     <fragment
         android:id="@+id/afterLog3"
         android:name="com.example.cs125.AfterLog"
         android:label="fragment_after_log"
         tools:layout="@layout/fragment_after_log" />
+    <fragment
+        android:id="@+id/signUpFragment6"
+        android:name="com.example.cs125.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+
 </navigation>
