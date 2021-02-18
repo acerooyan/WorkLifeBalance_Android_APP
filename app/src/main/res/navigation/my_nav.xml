@@ -10,21 +10,38 @@
         android:label="fragment_login_interface"
         tools:layout="@layout/fragment_login_interface" >
         <action
-            android:id="@+id/action_login_interface_to_afterLog3"
-            app:destination="@id/afterLog3" />
-        <action
             android:id="@+id/action_login_interface_to_signUpFragment6"
             app:destination="@id/signUpFragment6" />
+        <action
+            android:id="@+id/action_login_interface_to_getWorkTime"
+            app:destination="@id/getWorkTime" />
     </fragment>
-    <fragment
-        android:id="@+id/afterLog3"
-        android:name="com.example.cs125.AfterLog"
-        android:label="fragment_after_log"
-        tools:layout="@layout/fragment_after_log" />
     <fragment
         android:id="@+id/signUpFragment6"
         android:name="com.example.cs125.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/getWorkTime"
+        android:name="com.example.cs125.GetWorkTime"
+        android:label="fragment_get_work_time"
+        tools:layout="@layout/fragment_get_work_time" >
+        <action
+            android:id="@+id/action_getWorkTime_to_countDown6"
+            app:destination="@id/countDown6" />
+    </fragment>
+    <activity
+        android:id="@+id/countDown6"
+        android:name="com.example.cs125.CountDown"
+        android:label="activity_count_down"
+        tools:layout="@layout/activity_count_down" />
+        <action
+            android:id="@+id/action_countDown6_to_afterlog"
+            app:destination="@id/afterLog" />
+    <fragment
+        android:id="@+id/afterLog"
+        android:name="com.example.cs125.AfterLog"
+        android:label="fragment_after_log"
+        tools:layout="@layout/fragment_after_log" />
 
 </navigation>

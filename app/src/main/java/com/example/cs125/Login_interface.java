@@ -75,6 +75,7 @@ public class Login_interface extends Fragment {
         Button button;
         Button SignUpButton;
 
+
         button = getView().findViewById(R.id.LogninButton);
         SignUpButton = getView().findViewById(R.id.SignUpbutton);
 
@@ -83,7 +84,7 @@ public class Login_interface extends Fragment {
             public void onClick(View v) {
 
                 NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_login_interface_to_afterLog3);
+                controller.navigate(R.id.action_login_interface_to_getWorkTime);
 
             }
         });

@@ -1,34 +1,33 @@
 package com.example.cs125;
 
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.TextUtils;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import java.util.Calendar;
+
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SignUpFragment#newInstance} factory method to
+ * Use the {@link GetWorkTime#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignUpFragment extends Fragment {
+public class GetWorkTime extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +38,7 @@ public class SignUpFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SignUpFragment() {
+    public GetWorkTime() {
         // Required empty public constructor
     }
 
@@ -49,11 +48,11 @@ public class SignUpFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SignUpFragment.
+     * @return A new instance of fragment GetWorkTime.
      */
     // TODO: Rename and change types and number of parameters
-    public static SignUpFragment newInstance(String param1, String param2) {
-        SignUpFragment fragment = new SignUpFragment();
+    public static GetWorkTime newInstance(String param1, String param2) {
+        GetWorkTime fragment = new GetWorkTime();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,63 +63,61 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_get_work_time, container, false);
+    }
 
+    public static class mins extends AppCompatActivity{
+        TextView t;
 
-        return inflater.inflate(R.layout.fragment_sign_up, container, false);
-
+        public static int NC;
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button RigsterButton;
-        RigsterButton = getView().findViewById(R.id.ReigsterButton);
+        Button StartWorkButton;
+        TimePicker time_picker;
 
-        EditText ID, passcode;
-        FirebaseAuth fAuth;
 
-        ID = getView().findViewById(R.id.editTextTextEmailAddress2);
-        passcode = getView().findViewById(R.id.editTextTextPassword2);
-        fAuth = FirebaseAuth.getInstance();
+        StartWorkButton = getView().findViewById(R.id.time_sure);
+        time_picker = getView().findViewById(R.id.time_picker);
 
-        RigsterButton.setOnClickListener(new View.OnClickListener() {
+
+
+
+        StartWorkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = ID.getText().toString().trim();
-                String mima = passcode.getText().toString().trim();
-                if(TextUtils.isEmpty(username)  ){
-                    ID.setError("cannot be empty");
-
-                }
-                if(TextUtils.isEmpty(mima)){
-                    passcode.setError("cannot be empty");
-
-                }
-
-                fAuth.createUserWithEmailAndPassword(username, mima).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-
-                        }
-                    }
-                });
 
 
+                EditText E;
+                E = getView().findViewById(R.id.SetMins);
 
+                String m;
+
+                m  = E.getText().toString();
+
+
+                mins.NC =   Integer.parseInt(m) * 60;
+
+                NavController controller = Navigation.findNavController(v);
+                controller.navigate(R.id.action_getWorkTime_to_countDown6);
 
             }
         });
+
+
     }
 }
