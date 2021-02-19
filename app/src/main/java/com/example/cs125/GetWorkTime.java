@@ -1,10 +1,12 @@
 package com.example.cs125;
 
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -101,23 +103,43 @@ public class GetWorkTime extends Fragment {
             @Override
             public void onClick(View v) {
 
-
                 EditText E;
                 E = getView().findViewById(R.id.SetMins);
-
                 String m;
-
                 m  = E.getText().toString();
 
-
                 mins.NC =   Integer.parseInt(m) * 60;
-
+                showNormalDialog();
                 NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_getWorkTime_to_countDown6);
+                //controller.navigate(R.id.action_getWorkTime_to_countDown6);
 
             }
         });
 
 
+    }
+    private void showNormalDialog(){
+
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getContext());
+        normalDialog.setIcon(R.drawable.icon_dialog);
+        normalDialog.setTitle("Do you want give a to save current location");
+        normalDialog.setMessage("If yes please give please enter a nickname to the location");
+        normalDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        normalDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
+                    }
+                });
+        // 显示
+        normalDialog.show();
     }
 }
