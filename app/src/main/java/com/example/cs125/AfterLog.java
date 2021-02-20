@@ -2,11 +2,15 @@ package com.example.cs125;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,5 +64,47 @@ public class AfterLog extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_after_log, container, false);
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Button high, mid, low , recommend;
+
+
+
+        high = getView().findViewById(R.id.high);
+        mid = getView().findViewById(R.id.medium );
+        low = getView().findViewById(R.id.low);
+
+        high.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                NavController controller = Navigation.findNavController(v);
+                controller.navigate(R.id.action_afterLog_to_getWorkTime);
+
+            }
+        });
+
+        mid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController controller = Navigation.findNavController(v);
+                controller.navigate(R.id.action_afterLog_to_getWorkTime);
+
+            }
+        });
+
+
+        low.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController controller = Navigation.findNavController(v);
+                controller.navigate(R.id.action_afterLog_to_getWorkTime);
+
+            }
+        });
     }
 }

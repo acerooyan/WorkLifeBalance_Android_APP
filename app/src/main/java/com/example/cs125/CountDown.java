@@ -38,13 +38,14 @@ public class CountDown extends AppCompatActivity {
         int nc;
         nc = GetWorkTime.mins.NC * 1000;
         T.setText(Integer.toString(nc));
+        counter = GetWorkTime.mins.NC;
 
         //T.setText(Integer.toString(nc));
         new CountDownTimer(nc,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 counttime.setText(String.valueOf(counter));
-                counter++;
+                counter--;
             }
             @Override
             public void onFinish() {

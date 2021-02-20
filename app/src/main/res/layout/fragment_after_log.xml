@@ -8,6 +8,7 @@
     tools:context=".AfterLog" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/afterlog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF">
@@ -23,10 +24,10 @@
             app:layout_constraintHorizontal_bias="0.493"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.075" />
+            app:layout_constraintVertical_bias="0.105" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/low"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Low"
@@ -38,7 +39,7 @@
             app:layout_constraintVertical_bias="0.225" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Medium"
@@ -50,7 +51,7 @@
             app:layout_constraintVertical_bias="0.358" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/high"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="High"
@@ -59,13 +60,13 @@
             app:layout_constraintHorizontal_bias="0.145"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.486" />
+            app:layout_constraintVertical_bias="0.499" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/Recommend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="customize"
+            android:text="Recommend Me"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.16"

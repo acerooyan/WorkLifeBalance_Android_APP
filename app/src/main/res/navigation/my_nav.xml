@@ -13,8 +13,8 @@
             android:id="@+id/action_login_interface_to_signUpFragment6"
             app:destination="@id/signUpFragment6" />
         <action
-            android:id="@+id/action_login_interface_to_getWorkTime"
-            app:destination="@id/getWorkTime" />
+            android:id="@+id/action_login_interface_to_afterLog"
+            app:destination="@id/afterLog" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment6"
@@ -35,13 +35,15 @@
         android:name="com.example.cs125.CountDown"
         android:label="activity_count_down"
         tools:layout="@layout/activity_count_down" />
-        <action
-            android:id="@+id/action_countDown6_to_afterlog"
-            app:destination="@id/afterLog" />
+
     <fragment
         android:id="@+id/afterLog"
         android:name="com.example.cs125.AfterLog"
         android:label="fragment_after_log"
-        tools:layout="@layout/fragment_after_log" />
+        tools:layout="@layout/fragment_after_log" >
+        <action
+            android:id="@+id/action_afterLog_to_getWorkTime"
+            app:destination="@id/getWorkTime" />
+    </fragment>
 
 </navigation>
