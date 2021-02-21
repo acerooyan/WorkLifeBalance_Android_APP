@@ -106,8 +106,8 @@ public class Login_interface extends Fragment {
 
                  */
                 NavController controller = Navigation.findNavController(v);
-                //controller.navigate(R.id.action_login_interface_to_afterLog);
-                controller.navigate(R.id.action_login_interface_to_locations);
+                controller.navigate(R.id.action_login_interface_to_afterLog);
+                //controller.navigate(R.id.action_login_interface_to_locations);
 
 
                 String username = Email.getText().toString().trim();
