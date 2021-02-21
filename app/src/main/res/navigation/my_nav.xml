@@ -15,12 +15,19 @@
         <action
             android:id="@+id/action_login_interface_to_afterLog"
             app:destination="@id/afterLog" />
+        <action
+            android:id="@+id/action_login_interface_to_locations"
+            app:destination="@id/locations" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment6"
         android:name="com.example.cs125.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" />
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment6_to_login_interface"
+            app:destination="@id/login_interface" />
+    </fragment>
     <fragment
         android:id="@+id/getWorkTime"
         android:name="com.example.cs125.GetWorkTime"
@@ -45,5 +52,10 @@
             android:id="@+id/action_afterLog_to_getWorkTime"
             app:destination="@id/getWorkTime" />
     </fragment>
+    <fragment
+        android:id="@+id/locations"
+        android:name="com.example.cs125.locations"
+        android:label="fragment_locations"
+        tools:layout="@layout/fragment_locations" />
 
 </navigation>

@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login_interface">
+    tools:context=".Login_interface"
+    tools:visibility="visible">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_launcher_background">
+        android:background="@drawable/ic_launcher_background"
+        android:rotationX="360">
 
         <Button
             android:id="@+id/SignUpbutton"
@@ -35,10 +37,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478" />
+
         <EditText
             android:id="@+id/editTextTextPassword2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,8 +50,7 @@
             app:layout_constraintHorizontal_bias="0.706"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.583"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.583" />
 
         <TextView
             android:id="@+id/textView2"
@@ -69,26 +72,26 @@
             android:layout_marginEnd="80dp"
             android:layout_marginRight="80dp"
             android:ems="10"
-            android:hint="@string/enter_user_id_here"
+            android:hint="enter email address here"
+            android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.479"
-            android:importantForAutofill="no" />
+            app:layout_constraintVertical_bias="0.479" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="241dp"
             android:layout_height="210dp"
+            android:contentDescription="@string/todo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.511"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.157"
-            app:srcCompat="@drawable/rester"
-            android:contentDescription="@string/todo" />
+            app:srcCompat="@drawable/rester" />
 
         <Button
             android:id="@+id/LogninButton"
@@ -100,5 +103,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.467"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#2196F3"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.651"
+            tools:visibility="invisible" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

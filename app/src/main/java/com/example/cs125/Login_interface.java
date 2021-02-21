@@ -1,19 +1,25 @@
 package com.example.cs125;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
-import java.io.*;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,16 +81,78 @@ public class Login_interface extends Fragment {
         Button button;
         Button SignUpButton;
 
+        ProgressBar progressBar;
+        EditText Email, password;
+        FirebaseAuth firebase;
+
+        firebase = FirebaseAuth.getInstance();
+        Email = getView().findViewById(R.id.editTextTextEmailAddress2);
+        password =  getView().findViewById(R.id.editTextTextPassword2);
+        progressBar = getView().findViewById(R.id.progressBar2);
+
+
+
 
         button = getView().findViewById(R.id.LogninButton);
         SignUpButton = getView().findViewById(R.id.SignUpbutton);
 
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /* change here
 
+
+                 */
                 NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_login_interface_to_afterLog);
+                //controller.navigate(R.id.action_login_interface_to_afterLog);
+                controller.navigate(R.id.action_login_interface_to_locations);
+
+
+                String username = Email.getText().toString().trim();
+                String mima = password.getText().toString().trim();
+                if(TextUtils.isEmpty(username)  ){
+
+                    Email.setError("ID cannot be empty");
+
+                    return;
+
+                }
+                if(TextUtils.isEmpty(mima)){
+                    password.setError("\"cannot be empty\"");
+
+                    return;
+
+                }
+
+
+                if(mima.length() < 8){
+                    password.setError("password must be at least 8 characters");
+                    return;
+
+                }
+
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                firebase.signInWithEmailAndPassword(username, mima).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getContext(), "login suessuflly!", Toast.LENGTH_LONG).show();
+                            //startActivity(new Intent(getContext(), MainActivity2.class));
+                            NavController controller = Navigation.findNavController(v);
+                            controller.navigate(R.id.action_login_interface_to_afterLog);
+                        }
+                        else{
+                            Toast.makeText(getContext(), "incorrect email/password" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+
+                        }
+                    }
+                });
+
 
             }
         });

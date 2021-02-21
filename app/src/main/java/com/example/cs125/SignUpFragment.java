@@ -1,15 +1,6 @@
 package com.example.cs125;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -100,11 +97,23 @@ public class SignUpFragment extends Fragment {
                 String username = ID.getText().toString().trim();
                 String mima = passcode.getText().toString().trim();
                 if(TextUtils.isEmpty(username)  ){
-                    ID.setError("cannot be empty");
+
+                    ID.setError("ID cannot be empty");
+
+                    return;
 
                 }
                 if(TextUtils.isEmpty(mima)){
-                    passcode.setError("cannot be empty");
+                    passcode.setError("\"cannot be empty\"");
+
+                    return;
+
+                }
+
+
+                if(mima.length() < 8){
+                    passcode.setError("password must be at least 8 characters");
+                    return;
 
                 }
 
@@ -112,9 +121,17 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            Toast.makeText(getContext(), "account suessuflly created!", Toast.LENGTH_LONG).show();
+                            //startActivity(new Intent(getContext(), MainActivity2.class));
+                            NavController controller = Navigation.findNavController(v);
+                            controller.navigate(R.id.action_signUpFragment6_to_login_interface);
+                        }
+                        else{
+                            Toast.makeText(getContext(), "account failed to created!", Toast.LENGTH_LONG).show();
 
                         }
                     }
+
                 });
 
 
