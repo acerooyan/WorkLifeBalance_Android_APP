@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -68,6 +69,13 @@ public class Login_interface extends Fragment {
         }
     }
 
+    public static class UserUid extends AppCompatActivity {
+
+        public static String uid;
+        public static String Useremail;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,7 +115,7 @@ public class Login_interface extends Fragment {
                  */
                 NavController controller = Navigation.findNavController(v);
                 controller.navigate(R.id.action_login_interface_to_afterLog);
-                //controller.navigate(R.id.action_login_interface_to_locations);
+
 
 
                 String username = Email.getText().toString().trim();
@@ -142,6 +150,10 @@ public class Login_interface extends Fragment {
                         if(task.isSuccessful()){
                             Toast.makeText(getContext(), "login suessuflly!", Toast.LENGTH_LONG).show();
                             //startActivity(new Intent(getContext(), MainActivity2.class));
+                            String uids = firebase.getUid();
+
+                            UserUid.uid = uids;
+                            UserUid.Useremail = username;
                             NavController controller = Navigation.findNavController(v);
                             controller.navigate(R.id.action_login_interface_to_afterLog);
                         }

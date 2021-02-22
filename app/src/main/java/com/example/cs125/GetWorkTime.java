@@ -2,6 +2,7 @@ package com.example.cs125;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -40,6 +41,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -51,7 +54,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import cz.msebera.android.httpclient.entity.mime.Header;
 
 
 /**
@@ -125,9 +127,7 @@ public class GetWorkTime extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        int PERMISSION_ID = 44;
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+       // mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         // method to get the location
 
 
@@ -137,7 +137,8 @@ public class GetWorkTime extends Fragment {
 
 
         StartWorkButton = getView().findViewById(R.id.time_sure);
-        //time_picker = getView().findViewById(R.id.time_picker);
+        time_picker = getView().findViewById(R.id.time_picker);
+        MyPoint.Start =  Integer.toString(time_picker.getHour()) + ":" + Integer.toString(time_picker.getMinute()) ;
 
 
 
@@ -156,15 +157,20 @@ public class GetWorkTime extends Fragment {
                 }
                 mins.NC =   Integer.parseInt(m) * 60;
 
-                getLastLocation();
 
 
 
 
 
-                showNormalDialog();
-                NavController controller = Navigation.findNavController(v);
-                //controller.navigate(R.id.action_getWorkTime_to_countDown6);
+                showNormalDialog(v);
+
+
+
+
+
+
+
+
 
             }
         });
@@ -173,7 +179,7 @@ public class GetWorkTime extends Fragment {
     }
 
 
-    private void LocationDialog(){
+    private void LocationDialog(View v){
 
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getContext());
@@ -195,10 +201,11 @@ public class GetWorkTime extends Fragment {
                     }
                 });
         // 显示
+
         normalDialog.show();
     }
 
-    private void showNormalDialog(){
+    private void showNormalDialog(View v){
 
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getContext());
@@ -209,18 +216,41 @@ public class GetWorkTime extends Fragment {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        LocationDialog();
+                        LocationDialog(v);
                     }
                 });
         normalDialog.setNegativeButton("No",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
+
+                        DatabaseReference database;
+                        //String UID = Login_interface.UserUid.uid;
+                        String UID = "fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
+                        database = FirebaseDatabase.getInstance().getReference("user");
+
+                        String longtiude_latitude = Double.toString(MyPoint.Longti) + " " + Double.toString(MyPoint.Lati);
+
+                        UserData data = new UserData(Login_interface.UserUid.Useremail, longtiude_latitude, MyPoint.Start, "1");
+
+                        //database.child(Login_interface.UserUid.uid).child("456").setValue(data);
+
+                        database.child(UID).child("456").setValue(data);
+
+
+                        NavController controller = Navigation.findNavController(v);
+
+                        controller.navigate(R.id.action_getWorkTime_to_countDown6);
+
+
+
+
+
                     }
                 });
         // 显示
         normalDialog.show();
+
     }
 
 
@@ -231,11 +261,16 @@ public class GetWorkTime extends Fragment {
 
         public static double Longti;
         public static double Lati;
+        public static boolean check = false;
+        public static String Start;
+
     }
 
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
-
+        if (MyPoint.check){
+            return;
+        }
 
         if (checkPermissions()) {
 
@@ -250,8 +285,10 @@ public class GetWorkTime extends Fragment {
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
-                        Location location = task.getResult();
-                        requestNewLocationData();
+                        if (!MyPoint.check){
+                        requestPermissions();
+                        requestNewLocationData();}
+
 
 
                     }
@@ -264,7 +301,9 @@ public class GetWorkTime extends Fragment {
         } else {
             // if permissions aren't available,
             // request for permissions
+            //Log.d()
             requestPermissions();
+
         }
     }
     @SuppressLint("MissingPermission")
@@ -343,7 +382,7 @@ public class GetWorkTime extends Fragment {
                 weatherData weatherD=weatherData.fromJson(response);
                 Weather.setText("Local Weather " + weatherD.getmWeatherType());
                 Weather1.setText(  "Temperature: " + weatherD.getmTemperature() + " " + weatherD.getMcity());
-
+                MyPoint.check = true;
             }
 
             @Override
@@ -351,6 +390,7 @@ public class GetWorkTime extends Fragment {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 String errorcode = "Error";
                 String message = "Unexcepet data";
+
                 try {
                     errorcode = errorResponse.getString("cod");
                     message = errorResponse.getString("message");
@@ -360,7 +400,9 @@ public class GetWorkTime extends Fragment {
                 Weather.setText("code " + errorcode);
                 Weather1.setText(message);
                 Toast.makeText(getContext(),"Failed to get weather data",Toast.LENGTH_SHORT).show();
+                MyPoint.check = true;
             }
+
 
 
         });
