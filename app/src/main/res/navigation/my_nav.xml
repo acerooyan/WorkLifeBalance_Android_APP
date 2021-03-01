@@ -34,14 +34,9 @@
         android:label="fragment_get_work_time"
         tools:layout="@layout/fragment_get_work_time" >
         <action
-            android:id="@+id/action_getWorkTime_to_countDown6"
-            app:destination="@id/countDown6" />
+            android:id="@+id/action_getWorkTime_to_myTimer"
+            app:destination="@id/myTimer" />
     </fragment>
-    <activity
-        android:id="@+id/countDown6"
-        android:name="com.example.cs125.CountDown"
-        android:label="activity_count_down"
-        tools:layout="@layout/activity_count_down" />
 
     <fragment
         android:id="@+id/afterLog"
@@ -57,5 +52,10 @@
         android:name="com.example.cs125.locations"
         android:label="fragment_locations"
         tools:layout="@layout/fragment_locations" />
+    <fragment
+        android:id="@+id/myTimer"
+        android:name="com.example.cs125.MyTimer"
+        android:label="fragment_my_timer"
+        tools:layout="@layout/fragment_my_timer" />
 
 </navigation>

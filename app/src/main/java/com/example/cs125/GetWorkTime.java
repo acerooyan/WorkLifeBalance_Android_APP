@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -155,7 +156,7 @@ public class GetWorkTime extends Fragment {
                     E.setError("Please Enter a Number ");
                     return;
                 }
-                mins.NC =   Integer.parseInt(m) * 60;
+                mins.NC =   Integer.parseInt(m) ;
 
 
 
@@ -184,16 +185,19 @@ public class GetWorkTime extends Fragment {
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getContext());
         normalDialog.setIcon(R.drawable.icon_dialog);
-        normalDialog.setTitle("Location");
-        normalDialog.setMessage("If yes please give please enter a nickname to the location");
-        normalDialog.setPositiveButton("Yes",
+        normalDialog.setTitle("Enter Nickname");
+        final  EditText NicknameInput = new EditText(getContext());
+        NicknameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        normalDialog.setView(NicknameInput);
+        normalDialog.setPositiveButton("Save",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //...To-do
                     }
                 });
-        normalDialog.setNegativeButton("No",
+        normalDialog.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -210,19 +214,23 @@ public class GetWorkTime extends Fragment {
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(getContext());
         normalDialog.setIcon(R.drawable.icon_dialog);
-        normalDialog.setTitle("Do you want save current location");
+        normalDialog.setTitle("Enter Label For Current Location: ");
+        final  EditText NicknameInput = new EditText(getContext());
+        NicknameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        normalDialog.setView(NicknameInput);
         //normalDialog.setMessage("If yes please give please enter a nickname to the location");
         normalDialog.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        LocationDialog(v);
-                    }
-                });
-        normalDialog.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+
+                        String s  = NicknameInput.getText().toString();
+                        if (TextUtils.isEmpty(s)){
+                            NicknameInput.setError("Label Cannot Be Empty!");
+                        }
+                        MyPoint.NICKname = s;
+
 
                         DatabaseReference database;
                         //String UID = Login_interface.UserUid.uid;
@@ -231,16 +239,30 @@ public class GetWorkTime extends Fragment {
 
                         String longtiude_latitude = Double.toString(MyPoint.Longti) + " " + Double.toString(MyPoint.Lati);
 
-                        UserData data = new UserData(Login_interface.UserUid.Useremail, longtiude_latitude, MyPoint.Start, "1");
+                        longtiude_latitude = longtiude_latitude.replace('.', '_') ;
+                        UserData data = new UserData(MyPoint.NICKname, MyPoint.Start, Integer.toString(mins.NC));
+                        database.child(UID).child(longtiude_latitude).setValue(data);
 
-                        //database.child(Login_interface.UserUid.uid).child("456").setValue(data);
 
-                        database.child(UID).child("456").setValue(data);
+                        NavController controller = Navigation.findNavController(v);
+                        controller.navigate(R.id.action_getWorkTime_to_myTimer);
+
+
+                    }
+
+
+                });
+        normalDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
 
 
                         NavController controller = Navigation.findNavController(v);
 
-                        controller.navigate(R.id.action_getWorkTime_to_countDown6);
+                        controller.navigate(R.id.action_getWorkTime_to_myTimer);
 
 
 
@@ -263,6 +285,8 @@ public class GetWorkTime extends Fragment {
         public static double Lati;
         public static boolean check = false;
         public static String Start;
+        public static String NICKname = "Null";
+
 
     }
 
