@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MyTimer#newInstance} factory method to
@@ -87,7 +90,16 @@ public class MyTimer extends Fragment {
             public void onFinish() {
                 counttime.setText("Finished");
 
+                DatabaseReference database;
+                //String UID = Login_interface.UserUid.uid;
+                String UID = "fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
+                database = FirebaseDatabase.getInstance().getReference("user");
 
+                String longtiude_latitude = Double.toString(GetWorkTime.MyPoint.Longti) + " " + Double.toString(GetWorkTime.MyPoint.Lati);
+
+                longtiude_latitude = longtiude_latitude.replace('.', '_') ;
+                UserData data = new UserData(GetWorkTime.MyPoint.NICKname, GetWorkTime.MyPoint.Start, Integer.toString(GetWorkTime.mins.NC));
+                database.child(UID).child(longtiude_latitude).setValue(data);
 
             }
         }.start();

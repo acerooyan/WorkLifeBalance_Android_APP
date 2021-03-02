@@ -157,21 +157,7 @@ public class GetWorkTime extends Fragment {
                     return;
                 }
                 mins.NC =   Integer.parseInt(m) ;
-
-
-
-
-
-
                 showNormalDialog(v);
-
-
-
-
-
-
-
-
 
             }
         });
@@ -232,17 +218,6 @@ public class GetWorkTime extends Fragment {
                         MyPoint.NICKname = s;
 
 
-                        DatabaseReference database;
-                        //String UID = Login_interface.UserUid.uid;
-                        String UID = "fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
-                        database = FirebaseDatabase.getInstance().getReference("user");
-
-                        String longtiude_latitude = Double.toString(MyPoint.Longti) + " " + Double.toString(MyPoint.Lati);
-
-                        longtiude_latitude = longtiude_latitude.replace('.', '_') ;
-                        UserData data = new UserData(MyPoint.NICKname, MyPoint.Start, Integer.toString(mins.NC));
-                        database.child(UID).child(longtiude_latitude).setValue(data);
-
 
                         NavController controller = Navigation.findNavController(v);
                         controller.navigate(R.id.action_getWorkTime_to_myTimer);
@@ -263,9 +238,6 @@ public class GetWorkTime extends Fragment {
                         NavController controller = Navigation.findNavController(v);
 
                         controller.navigate(R.id.action_getWorkTime_to_myTimer);
-
-
-
 
 
                     }
@@ -301,10 +273,6 @@ public class GetWorkTime extends Fragment {
             // check if location is enabled
             if (isLocationEnabled()) {
 
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
                 mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -312,8 +280,6 @@ public class GetWorkTime extends Fragment {
                         if (!MyPoint.check){
                         requestPermissions();
                         requestNewLocationData();}
-
-
 
                     }
                 });
