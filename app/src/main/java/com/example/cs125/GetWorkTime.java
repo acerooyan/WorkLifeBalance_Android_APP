@@ -42,8 +42,11 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -69,12 +72,16 @@ public class GetWorkTime extends Fragment {
 
     final String APP_ID = "30453cfd7241d277683fd96ed2791198";
     final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
+    FusedLocationProviderClient mFusedLocationClient;
+    int PERMISSION_ID = 44;
+
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    FusedLocationProviderClient mFusedLocationClient;
-    int PERMISSION_ID = 44;
+
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -107,6 +114,7 @@ public class GetWorkTime extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -117,10 +125,6 @@ public class GetWorkTime extends Fragment {
         return inflater.inflate(R.layout.fragment_get_work_time, container, false);
     }
 
-    public static class mins extends AppCompatActivity{
-
-        public static int NC;
-    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -133,13 +137,57 @@ public class GetWorkTime extends Fragment {
 
 
 
+
+
         Button StartWorkButton;
         TimePicker time_picker;
 
 
         StartWorkButton = getView().findViewById(R.id.time_sure);
         time_picker = getView().findViewById(R.id.time_picker);
-        MyPoint.Start =  Integer.toString(time_picker.getHour()) + ":" + Integer.toString(time_picker.getMinute()) ;
+
+        if (time_picker.getMinute() >  31){
+            MyPoint.Start =  Integer.toString(time_picker.getHour() + 1)  ;
+        }
+        else {
+            MyPoint.Start =  Integer.toString(time_picker.getHour() )  ;
+        }
+
+
+
+
+        Geocoder geocoder ;
+        List<Address> addresses = null;
+        geocoder = new Geocoder(getContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(GetWorkTime.MyPoint.Lati,  GetWorkTime.MyPoint.Longti, 1);
+        } catch (IOException e) {
+            Toast.makeText(getContext(),"Failed to get address data",Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        String address = addresses.get(0).getAddressLine(0);
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName();
+
+        if (GetWorkTime.MyPoint.check){
+            return;
+        }
+        TextView workplace, geolo;
+
+        workplace = getView().findViewById(R.id.workplace);
+        geolo= getView().findViewById(R.id.geoloc);
+        geolo.setText(country+ " " + address );
+        workplace.setText("Working place");
+
+
+        RequestParams params=new RequestParams();
+        params.put("q",city);
+        params.put("appid",APP_ID);
+        ConnectWeather(params);
 
 
 
@@ -156,7 +204,11 @@ public class GetWorkTime extends Fragment {
                     E.setError("Please Enter a Number ");
                     return;
                 }
+
+                MyPoint.NC = m;
                 mins.NC =   Integer.parseInt(m) ;
+
+
                 showNormalDialog(v);
 
             }
@@ -164,194 +216,6 @@ public class GetWorkTime extends Fragment {
 
 
     }
-
-
-    private void LocationDialog(View v){
-
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(getContext());
-        normalDialog.setIcon(R.drawable.icon_dialog);
-        normalDialog.setTitle("Enter Nickname");
-        final  EditText NicknameInput = new EditText(getContext());
-        NicknameInput.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        normalDialog.setView(NicknameInput);
-        normalDialog.setPositiveButton("Save",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                    }
-                });
-        normalDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //...To-do
-                    }
-                });
-        // 显示
-
-        normalDialog.show();
-    }
-
-    private void showNormalDialog(View v){
-
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(getContext());
-        normalDialog.setIcon(R.drawable.icon_dialog);
-        normalDialog.setTitle("Enter Label For Current Location: ");
-        final  EditText NicknameInput = new EditText(getContext());
-        NicknameInput.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        normalDialog.setView(NicknameInput);
-        //normalDialog.setMessage("If yes please give please enter a nickname to the location");
-        normalDialog.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        String s  = NicknameInput.getText().toString();
-                        if (TextUtils.isEmpty(s)){
-                            NicknameInput.setError("Label Cannot Be Empty!");
-                        }
-                        MyPoint.NICKname = s;
-
-
-
-                        NavController controller = Navigation.findNavController(v);
-                        controller.navigate(R.id.action_getWorkTime_to_myTimer);
-
-
-                    }
-
-
-                });
-        normalDialog.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-
-
-                        NavController controller = Navigation.findNavController(v);
-
-                        controller.navigate(R.id.action_getWorkTime_to_myTimer);
-
-
-                    }
-                });
-        // 显示
-        normalDialog.show();
-
-    }
-
-
-
-
-    // 地址
-    public static class MyPoint extends AppCompatActivity{
-
-        public static double Longti;
-        public static double Lati;
-        public static boolean check = false;
-        public static String Start;
-        public static String NICKname = "Null";
-
-
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        if (MyPoint.check){
-            return;
-        }
-
-        if (checkPermissions()) {
-
-            // check if location is enabled
-            if (isLocationEnabled()) {
-
-                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (!MyPoint.check){
-                        requestPermissions();
-                        requestNewLocationData();}
-
-                    }
-                });
-            } else {
-                Toast.makeText(getContext(), "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
-
-
-            }
-        } else {
-            // if permissions aren't available,
-            // request for permissions
-            //Log.d()
-            requestPermissions();
-
-        }
-    }
-    @SuppressLint("MissingPermission")
-    private void requestNewLocationData() {
-
-        // Initializing LocationRequest
-        // object with appropriate methods
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5);
-        mLocationRequest.setFastestInterval(0);
-        mLocationRequest.setNumUpdates(1);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-    }
-
-    private LocationCallback mLocationCallback = new LocationCallback() {
-
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location mLastLocation = locationResult.getLastLocation();
-
-            MyPoint.Longti = mLastLocation.getLongitude();
-            MyPoint.Lati = mLastLocation.getLatitude();
-
-
-            Geocoder geocoder ;
-            List<Address> addresses = null;
-            geocoder = new Geocoder(getContext(), Locale.getDefault());
-
-            try {
-                addresses = geocoder.getFromLocation(MyPoint.Lati,  MyPoint.Longti, 1);
-            } catch (IOException e) {
-                Toast.makeText(getContext(),"Failed to get address data",Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-            String address = addresses.get(0).getAddressLine(0);
-            String city = addresses.get(0).getLocality();
-            String state = addresses.get(0).getAdminArea();
-            String country = addresses.get(0).getCountryName();
-            String postalCode = addresses.get(0).getPostalCode();
-            String knownName = addresses.get(0).getFeatureName();
-
-
-            TextView workplace, geolo;
-
-            workplace = getView().findViewById(R.id.workplace1);
-            geolo= getView().findViewById(R.id.geoloc);
-            geolo.setText(country+ " " + address );
-            workplace.setText("Working place");
-
-
-            RequestParams params=new RequestParams();
-            params.put("q",city);
-            params.put("appid",APP_ID);
-            ConnectWeather(params);
-        }
-    };
 
     private  void ConnectWeather(RequestParams params) {
         AsyncHttpClient client = new AsyncHttpClient();
@@ -367,12 +231,13 @@ public class GetWorkTime extends Fragment {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                Toast.makeText(getContext(),"Data Get Success",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Weather Data Get Success",Toast.LENGTH_SHORT).show();
 
                 weatherData weatherD=weatherData.fromJson(response);
-                Weather.setText("Local Weather " + weatherD.getmWeatherType());
+                Weather.setText("Local Weather: " + weatherD.getmWeatherType());
                 Weather1.setText(  "Temperature: " + weatherD.getmTemperature() + " " + weatherD.getMcity());
-                MyPoint.check = true;
+                GetWorkTime.MyPoint.check = true;
+
             }
 
             @Override
@@ -390,7 +255,9 @@ public class GetWorkTime extends Fragment {
                 Weather.setText("code " + errorcode);
                 Weather1.setText(message);
                 Toast.makeText(getContext(),"Failed to get weather data",Toast.LENGTH_SHORT).show();
-                MyPoint.check = true;
+                GetWorkTime.MyPoint.check = true;
+                MyPoint.WatherType = "unknow";
+
             }
 
 
@@ -400,51 +267,96 @@ public class GetWorkTime extends Fragment {
 
     }
 
+    private void showNormalDialog(View v){
 
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(getContext());
+        normalDialog.setIcon(R.drawable.icon_dialog);
 
+        Log.d("MytagNick", DatabaseListner.Old_UserData.NICKname);
 
-    // method to check for permissions
-    private boolean checkPermissions() {
-        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (!DatabaseListner.Old_UserData.NICKname.equals("Null")){
 
-        // If we want background location
-        // on Android 10.0 and higher,
-        // use:
-        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
+            normalDialog.setTitle("You are working at "+ DatabaseListner.Old_UserData.NICKname);
 
-    // method to request for permissions
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]{
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
-    }
-
-    // method to check
-    // if location is enabled
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
-
-    // If everything is alright then
-    @Override
-    public void
-    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_ID) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
-            }
         }
+
+        else {
+
+            normalDialog.setTitle("Enter Label For Current Location: ");
+        }
+
+
+        final  EditText NicknameInput = new EditText(getContext());
+        NicknameInput.setInputType(InputType.TYPE_CLASS_TEXT);
+
+
+        normalDialog.setView(NicknameInput);
+        //normalDialog.setMessage("If yes please give please enter a nickname to the location");
+        normalDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String s  = NicknameInput.getText().toString();
+                        if (TextUtils.isEmpty(s)){
+                            NicknameInput.setError("Label Cannot Be Empty!");
+                        }
+
+                        MyPoint.NICKname = s;
+
+
+                        NavController controller = Navigation.findNavController(v);
+                        controller.navigate(R.id.action_getWorkTime_to_myTimer);
+
+
+                    }
+
+
+                });
+        normalDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+
+                        NavController controller = Navigation.findNavController(v);
+
+                        controller.navigate(R.id.action_getWorkTime_to_myTimer);
+
+                 }
+                });
+        // 显示
+        normalDialog.show();
+
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
+
+
+
+
+    public static class MyPoint extends AppCompatActivity{
+
+        public static double Longti;
+        public static double Lati;
+        public static String WatherType ;
+        public static boolean check = false;
+        public static String Start;
+        public static String NICKname = "Null";
+        public static String Intensity;
+        public static String NC;
+
+
+
+
     }
+
+
+    public static class mins extends AppCompatActivity{
+
+        public static int NC;
+    }
+
+
 }

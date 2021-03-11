@@ -1,18 +1,29 @@
 package com.example.cs125;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,10 +32,14 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class MyTimer extends Fragment {
     public int counter;
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -57,13 +72,12 @@ public class MyTimer extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +85,12 @@ public class MyTimer extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_timer, container, false);
     }
+
+
+
+
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -80,6 +100,8 @@ public class MyTimer extends Fragment {
         nc = GetWorkTime.mins.NC * 1000 * 60;
 
         counter = GetWorkTime.mins.NC * 60;
+
+        nc = 10;
         new CountDownTimer(nc,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -88,22 +110,46 @@ public class MyTimer extends Fragment {
             }
             @Override
             public void onFinish() {
+                Button GiveUpButton = getView().findViewById(R.id.GiveUP);
+                GiveUpButton.setVisibility(View.INVISIBLE);
                 counttime.setText("Finished");
 
-                DatabaseReference database;
+
+
+
+                String UID ="fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
                 //String UID = Login_interface.UserUid.uid;
-                String UID = "fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
-                database = FirebaseDatabase.getInstance().getReference("user");
+                DatabaseListner.CheckSameLocation(UID , true, true, false);
+                DatabaseListner.eventListener_trigger(UID);
 
-                String longtiude_latitude = Double.toString(GetWorkTime.MyPoint.Longti) + " " + Double.toString(GetWorkTime.MyPoint.Lati);
+                GiveUpButton.setText("REST NOW");
+                GiveUpButton.setVisibility(View.VISIBLE);
 
-                longtiude_latitude = longtiude_latitude.replace('.', '_') ;
-                UserData data = new UserData(GetWorkTime.MyPoint.NICKname, GetWorkTime.MyPoint.Start, Integer.toString(GetWorkTime.mins.NC));
-                database.child(UID).child(longtiude_latitude).setValue(data);
+
+                GiveUpButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //NavController controller = Navigation.findNavController(v);
+                        //controller.navigate(R.id.action_login_interface_to_signUpFragment6);
+
+
+                        //Intent myIntent = new Intent(getContext(), breath.class);
+                        Intent myIntent = new Intent(getContext(), StepsCounter.class);
+                        startActivity(myIntent);
+
+                    }
+                });
 
             }
         }.start();
 
+
+
+
+
+
+
     }
+
 
 }

@@ -77,11 +77,12 @@ public class AfterLog extends Fragment {
         high = getView().findViewById(R.id.high);
         mid = getView().findViewById(R.id.medium );
         low = getView().findViewById(R.id.low);
+        recommend = getView().findViewById(R.id.Recommend);
 
         high.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                GetWorkTime.MyPoint.Intensity = "high";
                 NavController controller = Navigation.findNavController(v);
                 controller.navigate(R.id.action_afterLog_to_getWorkTime);
 
@@ -91,6 +92,7 @@ public class AfterLog extends Fragment {
         mid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GetWorkTime.MyPoint.Intensity = "mid";
                 NavController controller = Navigation.findNavController(v);
                 controller.navigate(R.id.action_afterLog_to_getWorkTime);
 
@@ -101,10 +103,24 @@ public class AfterLog extends Fragment {
         low.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GetWorkTime.MyPoint.Intensity = "low";
                 NavController controller = Navigation.findNavController(v);
                 controller.navigate(R.id.action_afterLog_to_getWorkTime);
 
             }
         });
+
+        recommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                NavController controller = Navigation.findNavController(v);
+                controller.navigate(R.id.action_afterLog_to_recommendFragment);
+
+
+
+            }
+        });
+
     }
 }

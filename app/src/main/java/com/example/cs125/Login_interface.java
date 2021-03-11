@@ -1,26 +1,53 @@
 package com.example.cs125;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +60,10 @@ public class Login_interface extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    final String APP_ID = "30453cfd7241d277683fd96ed2791198";
+    final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
+    FusedLocationProviderClient mFusedLocationClient;
+    int PERMISSION_ID = 44;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -73,6 +104,9 @@ public class Login_interface extends Fragment {
 
         public static String uid;
         public static String Useremail;
+        public static boolean check = false;
+        public static boolean new_account = false;
+
     }
 
 
@@ -86,8 +120,7 @@ public class Login_interface extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button button;
-        Button SignUpButton;
+
 
         ProgressBar progressBar;
         EditText Email, password;
@@ -99,11 +132,11 @@ public class Login_interface extends Fragment {
         progressBar = getView().findViewById(R.id.progressBar2);
 
 
-
+        Button button;
+        Button SignUpButton;
 
         button = getView().findViewById(R.id.LogninButton);
         SignUpButton = getView().findViewById(R.id.SignUpbutton);
-
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +146,22 @@ public class Login_interface extends Fragment {
 
 
                  */
+
+                progressBar.setVisibility(View.INVISIBLE);
+
+                String UID ="fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
+                //String UID = Login_interface.UserUid.uid;
+                DatabaseListner.CheckSameLocation(UID, false, false, false);
+                DatabaseListner.CheckSameLocation(UID, false, false, true);
+
+                DatabaseListner.eventListener_trigger(UID );
+
+
+
+
+
+
+
                 NavController controller = Navigation.findNavController(v);
                 controller.navigate(R.id.action_login_interface_to_afterLog);
 
@@ -142,7 +191,7 @@ public class Login_interface extends Fragment {
                 }
 
 
-                progressBar.setVisibility(View.VISIBLE);
+
 
                 firebase.signInWithEmailAndPassword(username, mima).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -159,7 +208,7 @@ public class Login_interface extends Fragment {
                         }
                         else{
                             Toast.makeText(getContext(), "incorrect email/password" + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.INVISIBLE);
+
 
                         }
                     }
@@ -177,5 +226,140 @@ public class Login_interface extends Fragment {
 
             }
         });
+    }
+
+
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        if (UserUid.check){
+
+            return;
+        }
+
+        if (checkPermissions()) {
+
+            // check if location is enabled
+            if (isLocationEnabled()) {
+
+                // getting last
+                // location from
+                // FusedLocationClient
+                // object
+                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (!UserUid.check){
+                            requestPermissions();
+                            requestNewLocationData();}
+
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getContext(), "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+
+
+            }
+        } else {
+            // if permissions aren't available,
+            // request for permissions
+            //Log.d()
+            requestPermissions();
+
+        }
+    }
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+
+        // Initializing LocationRequest
+        // object with appropriate methods
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+    }
+
+    private LocationCallback mLocationCallback = new LocationCallback() {
+
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+
+            GetWorkTime.MyPoint.Longti = mLastLocation.getLongitude();
+            GetWorkTime.MyPoint.Lati = mLastLocation.getLatitude();
+            Toast.makeText(getContext(),"Location Data Get Success",Toast.LENGTH_SHORT).show();
+            UserUid.check = true;
+            ProgressBar loadingLocation;
+            loadingLocation = getView().findViewById(R.id.location_load);
+            loadingLocation.setVisibility(View.INVISIBLE);
+
+
+            Button button;
+            Button SignUpButton;
+
+            button = getView().findViewById(R.id.LogninButton);
+            SignUpButton = getView().findViewById(R.id.SignUpbutton);
+
+            button.setVisibility(View.VISIBLE);
+            SignUpButton.setVisibility(View.VISIBLE);
+
+
+        }
+    };
+
+
+
+
+
+
+    // method to check for permissions
+    private boolean checkPermissions() {
+        return ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        // If we want background location
+        // on Android 10.0 and higher,
+        // use:
+        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // method to request for permissions
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+    }
+
+    // method to check
+    // if location is enabled
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    // If everything is alright then
+    @Override
+    public void
+    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (checkPermissions() && !UserUid.check) {
+            getLastLocation();
+        }
     }
 }

@@ -5,33 +5,37 @@ public class UserData  {
 
 
 
-
-
-
     String Label;
-    String Sart_Time;
+    String Start_Time;
     String WorkTime;
+    String WorkIntensity;
 
 
+    public String getWorkIntensity() {
+        return WorkIntensity;
+    }
 
-
-    public UserData(String nickname, String sart_Time, String workTime) {
+    public UserData(String nickname, String start_Time, String workTime, String WorkIn) {
         Label = nickname;
         //User_location = user_location;
-        Sart_Time = sart_Time;
+        Start_Time = start_Time;
         WorkTime = workTime;
+        WorkIntensity = WorkIn;
         //End_time = end_time;
     }
 
 
 
+    public String getLabel() {
+        return Label;
+    }
 
     public String getWorkTime() {
         return WorkTime;
     }
 
-    public String getSart_Time() {
-        return Sart_Time;
+    public String getStart_Time() {
+        return Start_Time;
     }
 
 

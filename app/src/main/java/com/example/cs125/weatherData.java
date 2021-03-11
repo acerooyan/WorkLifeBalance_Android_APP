@@ -40,6 +40,7 @@ public class weatherData {
     {
         if(condition>=0 && condition<=300)
         {
+            
             return "thunderstrom1";
         }
         else if(condition>=300 && condition<=500)

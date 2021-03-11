@@ -15,9 +15,6 @@
         <action
             android:id="@+id/action_login_interface_to_afterLog"
             app:destination="@id/afterLog" />
-        <action
-            android:id="@+id/action_login_interface_to_locations"
-            app:destination="@id/locations" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment6"
@@ -46,16 +43,19 @@
         <action
             android:id="@+id/action_afterLog_to_getWorkTime"
             app:destination="@id/getWorkTime" />
+        <action
+            android:id="@+id/action_afterLog_to_recommendFragment"
+            app:destination="@id/recommendFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/locations"
-        android:name="com.example.cs125.locations"
-        android:label="fragment_locations"
-        tools:layout="@layout/fragment_locations" />
     <fragment
         android:id="@+id/myTimer"
         android:name="com.example.cs125.MyTimer"
         android:label="fragment_my_timer"
         tools:layout="@layout/fragment_my_timer" />
+    <fragment
+        android:id="@+id/recommendFragment"
+        android:name="com.example.cs125.RecommendFragment"
+        android:label="fragment_recommend"
+        tools:layout="@layout/fragment_recommend" />
 
 </navigation>

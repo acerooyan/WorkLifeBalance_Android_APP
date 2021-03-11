@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_launcher_background"
+        android:background="@drawable/background"
         android:rotationX="360"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -22,6 +22,7 @@
             android:layout_height="42dp"
             android:layout_marginBottom="116dp"
             android:text="@string/sign_up"
+            android:visibility="invisible"
             app:backgroundTint="#E91E63"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -104,12 +105,13 @@
             android:layout_width="168dp"
             android:layout_height="42dp"
             android:text="@string/log_in"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.465"
+            app:layout_constraintHorizontal_bias="0.452"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.768" />
+            app:layout_constraintVertical_bias="0.748" />
 
         <ProgressBar
             android:id="@+id/progressBar2"
@@ -126,6 +128,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.665"
             tools:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/location_load"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="115dp"
+            android:layout_height="133dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.806" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
