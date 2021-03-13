@@ -1,6 +1,9 @@
 package com.example.cs125;
 /*
 
+
+contribute by:  Hongji Yan
+
 This fragment directs user to choose their working intensity.
 
 

@@ -1,5 +1,10 @@
 package com.example.cs125;
+/*
+contributes by:  Hongji Yan
 
+This fragment has enables user to choose rest type
+
+ */
 import android.content.DialogInterface;
 import android.os.Bundle;
 

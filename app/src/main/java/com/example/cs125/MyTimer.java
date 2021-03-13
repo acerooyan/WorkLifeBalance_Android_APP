@@ -1,5 +1,12 @@
 package com.example.cs125;
+/*
 
+contributes by:  Hongji Yan, Leerjiya Bao
+
+
+This is fragment is where user working at
+
+ */
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;

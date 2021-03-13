@@ -2,7 +2,13 @@ package com.example.cs125;
 
 
 /*
+
+contributes by: Haowei Song
+
+
+
 This fragment directs user to choose rest type after work
+
 
  */
 import android.content.Intent;

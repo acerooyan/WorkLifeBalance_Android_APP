@@ -1,6 +1,7 @@
 package com.example.cs125;
 /*
 
+contributes by: Yang Lu
 User can choose to sign up, if they don't have an account.
 
 It's linked with firebase  authentication

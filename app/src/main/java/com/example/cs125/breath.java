@@ -1,6 +1,10 @@
 package com.example.cs125;
 
 /*
+
+contribute by: Yang Lu
+
+
 A type of rest, Breath activity when help user to get rest after work.
  */
 

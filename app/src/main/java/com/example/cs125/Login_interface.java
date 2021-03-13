@@ -2,6 +2,11 @@ package com.example.cs125;
 
 /*
 
+contribute by: Leerjiya Bao
+
+
+
+
 First interface of the software, software has to successfully retrieve the location data in x-y coordinate format before
 user use the software.
 

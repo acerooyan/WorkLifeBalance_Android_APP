@@ -1,5 +1,6 @@
 package com.example.cs125;
 
+// contributes by: Haowei song, Lu Yang
 // User data format
 public class UserData  {
 

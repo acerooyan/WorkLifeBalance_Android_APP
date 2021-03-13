@@ -1,6 +1,10 @@
 package com.example.cs125;
 
+
+
 /*
+
+contribute by: Yang Lu, Hongji Yan, Leerjiya Bao
 
 This fragment gets user's work time manually, and also obtain and display context information, such as local time, local weather
 and location data.

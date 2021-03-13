@@ -2,6 +2,11 @@ package com.example.cs125;
 
 
 /*
+
+
+contributes by: Yang Lu, Haowei Song
+
+
 Main component of the software, this file handles I/O of user's working data to database.
 Each time have complete a work system automatically saves user data to firebase, which includes the Lable of the location,
 work time, work intensity.
