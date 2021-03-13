@@ -1,28 +1,27 @@
 package com.example.cs125;
+
+
 /*
-
-This fragment directs user to choose their working intensity.
-
+This fragment directs user to choose rest type after work
 
  */
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AfterLog#newInstance} factory method to
+ * Use the {@link choose_rest_type#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AfterLog extends Fragment {
+public class choose_rest_type extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +32,7 @@ public class AfterLog extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AfterLog() {
+    public choose_rest_type() {
         // Required empty public constructor
     }
 
@@ -43,11 +42,11 @@ public class AfterLog extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AfterLog.
+     * @return A new instance of fragment choose_rest_type.
      */
     // TODO: Rename and change types and number of parameters
-    public static AfterLog newInstance(String param1, String param2) {
-        AfterLog fragment = new AfterLog();
+    public static choose_rest_type newInstance(String param1, String param2) {
+        choose_rest_type fragment = new choose_rest_type();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,64 +67,48 @@ public class AfterLog extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_after_log, container, false);
+        return inflater.inflate(R.layout.fragment_choose_rest_type, container, false);
     }
+
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button high, mid, low , recommend;
 
+        ImageButton walkb, breathb;
 
+        walkb = getView().findViewById(R.id.imageButton2);
+        breathb = getView().findViewById(R.id.imageButton3);
 
-        high = getView().findViewById(R.id.high);
-        mid = getView().findViewById(R.id.medium );
-        low = getView().findViewById(R.id.low);
-        recommend = getView().findViewById(R.id.Recommend);
-
-        high.setOnClickListener(new View.OnClickListener() {
+        walkb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetWorkTime.MyPoint.Intensity = "high";
-                NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_afterLog_to_getWorkTime);
+                //NavController controller = Navigation.findNavController(v);
+                //controller.navigate(R.id.action_login_interface_to_signUpFragment6);
 
-            }
-        });
 
-        mid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GetWorkTime.MyPoint.Intensity = "mid";
-                NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_afterLog_to_getWorkTime);
+                Intent myIntent = new Intent(getContext(), StepsCounter.class);
+                startActivity(myIntent);
 
             }
         });
 
 
-        low.setOnClickListener(new View.OnClickListener() {
+        breathb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetWorkTime.MyPoint.Intensity = "low";
-                NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_afterLog_to_getWorkTime);
+                //NavController controller = Navigation.findNavController(v);
+                //controller.navigate(R.id.action_login_interface_to_signUpFragment6);
+
+
+                Intent myIntent = new Intent(getContext(), breath.class);
+
+                startActivity(myIntent);
 
             }
         });
 
-        recommend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_afterLog_to_recommendFragment);
-
-
-
-            }
-        });
 
     }
 }

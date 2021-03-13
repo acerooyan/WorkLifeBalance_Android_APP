@@ -1,5 +1,7 @@
 package com.example.cs125;
 
+// Part of step counter
+//cited from: https://github.com/google/simple-pedometer/blob/master/src/com/google/android/apps/simplepedometer/SimpleStepDetector.java
 public class StepDetector {
 
     private static final int ACCEL_RING_SIZE = 50;
@@ -63,5 +65,3 @@ public class StepDetector {
         oldVelocityEstimate = velocityEstimate;
     }
 }
-
-//source  https://github.com/google/simple-pedometer/blob/master/src/com/google/android/apps/simplepedometer/SensorFusionMath.java

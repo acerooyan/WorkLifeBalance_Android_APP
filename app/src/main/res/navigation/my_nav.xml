@@ -51,11 +51,24 @@
         android:id="@+id/myTimer"
         android:name="com.example.cs125.MyTimer"
         android:label="fragment_my_timer"
-        tools:layout="@layout/fragment_my_timer" />
+        tools:layout="@layout/fragment_my_timer" >
+        <action
+            android:id="@+id/action_myTimer_to_choose_rest_type"
+            app:destination="@id/choose_rest_type" />
+    </fragment>
     <fragment
         android:id="@+id/recommendFragment"
         android:name="com.example.cs125.RecommendFragment"
         android:label="fragment_recommend"
-        tools:layout="@layout/fragment_recommend" />
+        tools:layout="@layout/fragment_recommend" >
+        <action
+            android:id="@+id/action_recommendFragment_to_myTimer"
+            app:destination="@id/myTimer" />
+    </fragment>
+    <fragment
+        android:id="@+id/choose_rest_type"
+        android:name="com.example.cs125.choose_rest_type"
+        android:label="fragment_choose_rest_type"
+        tools:layout="@layout/fragment_choose_rest_type" />
 
 </navigation>

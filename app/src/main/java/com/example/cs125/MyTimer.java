@@ -1,10 +1,12 @@
 package com.example.cs125;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -39,7 +41,8 @@ public class MyTimer extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
+    int rest_time ;
+    String IN;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -88,7 +91,24 @@ public class MyTimer extends Fragment {
 
 
 
+    public void Set_rest_time(){
 
+
+        if (GetWorkTime.MyPoint.Intensity.equals("high")){
+            rest_time = 4500;
+            rest_time = 5;
+            IN = "High";
+        }
+        else if(GetWorkTime.MyPoint.Intensity.equals("mid")){
+            rest_time = 3120;
+            IN = "Midium";
+        }
+        else {
+            rest_time = 1500;
+            IN = "Low";
+
+        }
+    }
 
 
 
@@ -100,42 +120,124 @@ public class MyTimer extends Fragment {
         nc = GetWorkTime.mins.NC * 1000 * 60;
 
         counter = GetWorkTime.mins.NC * 60;
+        String words = "You Work intensity: ";
+        TextView textView12;
 
-        nc = 10;
+        textView12= getView().findViewById(R.id.textView6);
+
+
+        Set_rest_time();
+        textView12.setText(words + IN);
+        //nc = 100;
+        if (GetWorkTime.MyPoint.Intensity.equals("high")){
+            rest_time = 1500;
+            StepsCounter.nums = 150;
+
+        }
+        else if(GetWorkTime.MyPoint.Intensity.equals("mid")){
+
+            rest_time = 3120;
+
+
+            StepsCounter.nums= 300;
+        }
+        else {
+
+            rest_time = 4500;
+
+            StepsCounter.nums= 500;
+
+
+        }
+        Button GiveUpButton = getView().findViewById(R.id.GiveUP);
+        Button continue_work = getView().findViewById(R.id.countie_work);
+
+        //''''''''''''''''''
+
+        //nc = 5;
         new CountDownTimer(nc,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                counttime.setText(String.valueOf(counter));
+                int p1 = counter % 60;
+                int p2= counter / 60;
+                int p3 = p2 % 60;
+                p2 = p2 / 60;
+
+                String words;
+
+                if (p2 == 0){
+                    words =   String.valueOf(p3) + "Min "+ String.valueOf(p1) + "sec";
+
+                }
+                else if (p3 == 0 ){
+                    words =   String.valueOf(p1) + "sec";
+                }
+                else{
+                    words =  String.valueOf(p2) + "Hour"  + " " + String.valueOf(p3) + "Min "+ String.valueOf(p1) + "sec";
+                }
+
+                words += " remaining..";
+                counttime.setText(words);
                 counter--;
+                rest_time--;
+
+
+                if (rest_time == 0){
+                    cancel();
+
+                    continue_work.setVisibility(View.VISIBLE);
+                    GiveUpButton.setText("REST NOW");
+                    GetWorkTime.mins.NC = counter / 60000;
+                    GiveUpButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            NavController controller = Navigation.findNavController(v);
+                            controller.navigate(R.id.action_myTimer_to_choose_rest_type);
+
+                        }
+                    });
+
+
+                    continue_work.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Set_rest_time();
+                            start();
+                            continue_work.setVisibility(View.INVISIBLE);
+                            GiveUpButton.setText("Give up");
+                            return;
+
+                        }
+                    });
+
+
+
+                }
+
+
+
             }
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onFinish() {
-                Button GiveUpButton = getView().findViewById(R.id.GiveUP);
-                GiveUpButton.setVisibility(View.INVISIBLE);
+
+
                 counttime.setText("Finished");
 
 
 
-
-                String UID ="fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
-                //String UID = Login_interface.UserUid.uid;
+                GiveUpButton.setText("REST NOW");
+                String UID = Login_interface.UserUid.uid;
                 DatabaseListner.CheckSameLocation(UID , true, true, false);
                 DatabaseListner.eventListener_trigger(UID);
 
-                GiveUpButton.setText("REST NOW");
-                GiveUpButton.setVisibility(View.VISIBLE);
 
 
                 GiveUpButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //NavController controller = Navigation.findNavController(v);
-                        //controller.navigate(R.id.action_login_interface_to_signUpFragment6);
-
-
-                        //Intent myIntent = new Intent(getContext(), breath.class);
-                        Intent myIntent = new Intent(getContext(), StepsCounter.class);
-                        startActivity(myIntent);
+                        NavController controller = Navigation.findNavController(v);
+                        controller.navigate(R.id.action_myTimer_to_choose_rest_type);
 
                     }
                 });

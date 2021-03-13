@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".RecommendFragment">
 
     <ListView
+        android:id="@+id/listview"
         android:layout_width="596dp"
         android:layout_height="match_parent" />
 </FrameLayout>

@@ -1,6 +1,6 @@
 package com.example.cs125;
 
-
+// User data format
 public class UserData  {
 
 

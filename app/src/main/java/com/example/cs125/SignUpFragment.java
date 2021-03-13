@@ -1,5 +1,10 @@
 package com.example.cs125;
+/*
 
+User can choose to sign up, if they don't have an account.
+
+It's linked with firebase  authentication
+ */
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;

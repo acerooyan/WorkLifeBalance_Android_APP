@@ -1,18 +1,17 @@
 package com.example.cs125;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Context;
+/*
+
+This fragment gets user's work time manually, and also obtain and display context information, such as local time, local weather
+and location data.
+ */
+
+
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,28 +24,15 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -140,10 +126,12 @@ public class GetWorkTime extends Fragment {
 
 
         Button StartWorkButton;
-        TimePicker time_picker;
+
 
 
         StartWorkButton = getView().findViewById(R.id.time_sure);
+
+        TimePicker time_picker;
         time_picker = getView().findViewById(R.id.time_picker);
 
         if (time_picker.getMinute() >  31){
@@ -273,7 +261,7 @@ public class GetWorkTime extends Fragment {
                 new AlertDialog.Builder(getContext());
         normalDialog.setIcon(R.drawable.icon_dialog);
 
-        Log.d("MytagNick", DatabaseListner.Old_UserData.NICKname);
+
 
         if (!DatabaseListner.Old_UserData.NICKname.equals("Null")){
 

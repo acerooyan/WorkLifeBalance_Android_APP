@@ -1,9 +1,9 @@
 package com.example.cs125;
 
-
+//gets weather infomation
 import org.json.JSONException;
 import org.json.JSONObject;
-//cited from link: https://github.com/Brijesh-kumar-sharma/WeatherAppInAndroidStudio/blob/master/app/src/main/java/com/example/weatherapptutorial/weatherData.java for decode weather jason file
+//source link: https://github.com/Brijesh-kumar-sharma/WeatherAppInAndroidStudio/blob/master/app/src/main/java/com/example/weatherapptutorial/weatherData.java for decode weather jason file
 
 public class weatherData {
 

@@ -1,5 +1,15 @@
 package com.example.cs125;
 
+/*
+
+First interface of the software, software has to successfully retrieve the location data in x-y coordinate format before
+user use the software.
+
+User shall able to log in with their email account and password after successfully sign up, if they don't have an account.
+It's linked with firebase  authentication
+ */
+
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +18,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -19,10 +30,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -117,6 +130,7 @@ public class Login_interface extends Fragment {
         return inflater.inflate(R.layout.fragment_login_interface, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -137,33 +151,19 @@ public class Login_interface extends Fragment {
 
         button = getView().findViewById(R.id.LogninButton);
         SignUpButton = getView().findViewById(R.id.SignUpbutton);
+        TimePicker timePicker;
+        timePicker = getView().findViewById(R.id.time_picker1);
 
+        DatabaseListner.ALL_UserData.time = timePicker.getHour();
 
         button.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                /* change here
 
-
-                 */
 
                 progressBar.setVisibility(View.INVISIBLE);
-
-                String UID ="fNyAWmuBpGMrekwgGUQ9h3Tp8Hx1";
-                //String UID = Login_interface.UserUid.uid;
-                DatabaseListner.CheckSameLocation(UID, false, false, false);
-                DatabaseListner.CheckSameLocation(UID, false, false, true);
-
-                DatabaseListner.eventListener_trigger(UID );
-
-
-
-
-
-
-
-                NavController controller = Navigation.findNavController(v);
-                controller.navigate(R.id.action_login_interface_to_afterLog);
+                Login_interface.UserUid.uid = "9n13qsDpvzess72Ky1Vwsy9vWSs1";
 
 
 
@@ -171,7 +171,7 @@ public class Login_interface extends Fragment {
                 String mima = password.getText().toString().trim();
                 if(TextUtils.isEmpty(username)  ){
 
-                    Email.setError("ID cannot be empty");
+                    Email.setError("Email address cannot be empty");
 
                     return;
 
@@ -198,11 +198,23 @@ public class Login_interface extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(getContext(), "login suessuflly!", Toast.LENGTH_LONG).show();
-                            //startActivity(new Intent(getContext(), MainActivity2.class));
-                            String uids = firebase.getUid();
 
+
+                            String uids = firebase.getUid();
                             UserUid.uid = uids;
                             UserUid.Useremail = username;
+
+
+                            DatabaseListner.CheckSameLocation(Login_interface.UserUid.uid, false, false, false);
+                            DatabaseListner.CheckSameLocation(Login_interface.UserUid.uid, false, false, true);
+
+                            DatabaseListner.eventListener_trigger( Login_interface.UserUid.uid );
+
+
+
+
+
+
                             NavController controller = Navigation.findNavController(v);
                             controller.navigate(R.id.action_login_interface_to_afterLog);
                         }
