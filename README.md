@@ -14,6 +14,7 @@ There are many similar mobile apps on the market and most software has a good nu
 
 
 We have built a system which recommends the work time and rest time based on the user’s work time, work location and weather. We use 3 data sources to build a personal model and 4 for the contextual information as follows:
+
 Personal Model Data Sources:
   User’s Work Time Range based on mobile app (manual input)
   User’s Work Intensity based on mobile app (manual choose or recommend)
